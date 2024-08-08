@@ -38,8 +38,8 @@ INSTALLED_APPS = [
     'rest_framework',
 
     'symbol',
-    'market'
-    'core',
+    'market',
+    'core'
 
 ]
 

@@ -6,6 +6,8 @@ from eth_abi import decode
 from eth_utils import keccak
 from web3 import Web3
 
+from point_market_backend.rpcs import RPCs
+
 
 class Scanner:
     def __init__(self, web3: Web3):

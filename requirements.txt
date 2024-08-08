@@ -22,12 +22,14 @@ eth_abi==5.1.0
 factory-boy==3.3.0
 Faker==26.1.0
 frozenlist==1.4.1
+gunicorn==22.0.0
 hexbytes==0.3.1
 idna==3.7
 jsonschema==4.23.0
 jsonschema-specifications==2023.12.1
 lru-dict==1.2.0
 multidict==6.0.5
+packaging==24.1
 parsimonious==0.10.0
 pathlib==1.0.1
 protobuf==5.27.2

@@ -7,7 +7,7 @@ from market.models import Order
 from symbol.models import Symbol, BalanceModifier, Balance
 
 
-class OrderSerializer(serializers.ModelSerializer):
+class OrderCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Order
         fields = '__all__'
@@ -43,3 +43,11 @@ class OrderSerializer(serializers.ModelSerializer):
         balance.decrease(required)
 
         return attrs
+
+
+class OrderListSerializer(serializers.ModelSerializer):
+    amount = serializers.IntegerField(source='remaining_amount')
+
+    class Meta:
+        model = Order
+        fields = ('id', 'amount', 'price')

@@ -1,11 +1,11 @@
 from rest_framework import serializers
 from web3 import Web3
 
-from symbol.models import Symbol, BalanceModifier, Balance
+from symbol.models import Symbol, BalanceModifier, Balance, Chain
 from symbol.scanner import Scanner
 
 
-class BalanceModifierSerializer(serializers.ModelSerializer):
+class BalanceModifierCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = BalanceModifier
         fields = '__all__'
@@ -21,8 +21,8 @@ class BalanceModifierSerializer(serializers.ModelSerializer):
         return attrs
 
 
-class SymbolSerializer(serializers.ModelSerializer):
-    modifiers = BalanceModifierSerializer(many=True)
+class SymbolCreateSerializer(serializers.ModelSerializer):
+    modifiers = BalanceModifierCreateSerializer(many=True)
 
     class Meta:
         model = Symbol
@@ -44,8 +44,19 @@ class SymbolSerializer(serializers.ModelSerializer):
         return symbol
 
 
-class BalanceSerializer(serializers.ModelSerializer):
+class BalanceListSerializer(serializers.ModelSerializer):
+    symbol_name = serializers.CharField(source='symbol.name')
     class Meta:
         model = Balance
-        fields = '__all__'
-        read_only_fields = ('symbol',)
+        fields = ('symbol_name', 'value')
+
+
+class SymbolListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Symbol
+        fields = ('id', 'name')
+
+class ChainListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Chain
+        fields = ('id', 'name', 'chain_id')

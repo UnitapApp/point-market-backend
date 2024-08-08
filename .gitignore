@@ -3,3 +3,4 @@ zellular_queue
 pip
 db.sqlite3
 static
+.env

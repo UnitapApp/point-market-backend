@@ -11,6 +11,15 @@ from zellular import Zellular
 class SymbolCreateView(APIView):
 
     def post(self, request, *args, **kwargs):
+        create_symbol(request.data, save=False)
+
+        # push to zellular
+        Zellular.push(CREATE_SYMBOL, request.data)
+
+        return Response({}, status=status.HTTP_200_OK)
+
+
+    def post(self, request, *args, **kwargs):
         # todo: verify data
 
         # push to zellular

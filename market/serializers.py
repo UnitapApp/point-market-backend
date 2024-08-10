@@ -45,9 +45,14 @@ class OrderCreateSerializer(serializers.ModelSerializer):
         return attrs
 
 
-class OrderListSerializer(serializers.ModelSerializer):
+class OrderBookSerializer(serializers.ModelSerializer):
     amount = serializers.IntegerField(source='remaining_amount')
 
     class Meta:
         model = Order
         fields = ('id', 'amount', 'price')
+
+class OrderSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Order
+        fields = '__all__'

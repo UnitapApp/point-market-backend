@@ -14,11 +14,43 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+from io import StringIO
+
 from django.contrib import admin
+from django.core.management import call_command
 from django.urls import path, include
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+
+from market.management.commands.run_market import RunMarket
+from point_market_backend.management.commands.pull_zellular import PullZellular
+from symbol.management.commands.scan import Scan
+
+
+@api_view(['GET'])
+def run_crons(request):
+
+    try:
+        RunMarket.run(0)
+    except Exception as e:
+       pass
+
+    try:
+        PullZellular.perform()
+    except Exception as e:
+       pass
+
+    try:
+        Scan.run()
+    except Exception as e:
+        pass
+
+    return Response({})
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path("api/symbol/", include("symbol.urls")),
     path("api/market/", include("market.urls")),
+    path('run-crons/', run_crons),
 ]

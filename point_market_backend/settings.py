@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'corsheaders',
+    # 'django_cron',
 
     'symbol',
     'market',
@@ -127,3 +128,9 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 STATIC_ROOT = 'static'
 
 CORS_ALLOW_ALL_ORIGINS = True
+
+CRON_CLASSES = [
+    "point_market_backend.crons.MarketJob",
+    "point_market_backend.crons.ScanJob",
+    "point_market_backend.crons.ZellularJob",
+]

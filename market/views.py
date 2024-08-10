@@ -4,6 +4,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from market.models import Order
+from market.serializers import OrderListSerializer
 from point_market_backend.method_mapping import CREATE_ORDER
 from zellular import Zellular
 
@@ -29,8 +30,8 @@ class OrderListView(APIView):
         )
 
         data = {
-            'buys': qs.filter(name=Order.BUY)[:30],
-            'sells': qs.filter(name=Order.SELL)[:30]
+            'buys':OrderListSerializer(qs.filter(name=Order.BUY)[:30], many=True).data,
+            'sells': OrderListSerializer(qs.filter(name=Order.SELL)[:30], many=True).data
         }
 
         return Response(data, status=status.HTTP_200_OK)

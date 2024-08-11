@@ -33,7 +33,7 @@ class OrderCreateSerializer(serializers.ModelSerializer):
 
         if name == Order.BUY:
             required = amount * price
-            balance = Balance.get_balance_obj(Symbol.objects.get(pk=1), user)
+            balance = Balance.get_balance_obj(Symbol.get_usdc(), user)
         else:
             required = amount
             balance = Balance.get_balance_obj(symbol, user)

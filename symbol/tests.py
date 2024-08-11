@@ -3,10 +3,11 @@ from eth_account import Account
 from rest_framework.test import APIClient
 
 from point_market_backend.management.commands.pull_zellular import PullZellular
-from point_market_backend.utils import sign
+from point_market_backend.utils import sign, get_or_create_user
 import json
 
-from symbol.models import Chain, Symbol
+from symbol.methods import withdraw
+from symbol.models import Chain, Symbol, Balance
 
 
 class SymbolTestCase(TestCase):
@@ -64,3 +65,34 @@ class SymbolTestCase(TestCase):
 
         symbol = Symbol.objects.first()
         self.assertEqual(symbol.name, 'UXP')
+    def test_withdraw(self):
+        pk = Account.create().key
+        account = Account.from_key(pk)
+        admin = get_or_create_user(account.address)
+
+        chain = Chain.objects.create(
+            name='OP',
+            chain_id=10,
+            start_block=0,
+            last_scanned_block=0
+        )
+
+        USDC = Symbol.objects.create(
+            name='USDC',
+            owner=admin
+        )
+        Balance.get_balance_obj(USDC, admin).increase(100)
+
+        data = json.dumps({
+            'amount': 10
+        })
+        address, signature = sign(data, private_key=pk)
+
+
+        withdraw({
+            'address': address,
+            'message': data,
+            'signature': signature
+        })
+
+

@@ -12,11 +12,11 @@ class RunMarket(BaseCommand):
     help = "Runs market to start matching orders"
 
     def handle(self, *args, **options):
-        self.run(t=1)
+        self.run(t=0)
 
     @staticmethod
     def run(t):
-        USDC = Symbol.objects.get(pk=1)
+        USDC = Symbol.get_usdc()
         trading_queues = {}
         for symbol in Symbol.objects.filter(pk__gt=1).all():
             trading_queues[symbol] = TradingQueue(

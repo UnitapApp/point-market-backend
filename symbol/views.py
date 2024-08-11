@@ -2,7 +2,8 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from point_market_backend.method_mapping import CREATE_SYMBOL
+from point_market_backend.method_mapping import CREATE_SYMBOL, WITHDRAW
+from symbol.methods import create_symbol
 from symbol.models import Chain, Symbol, Balance
 from symbol.serializers import ChainListSerializer, SymbolListSerializer, BalanceListSerializer
 from zellular import Zellular
@@ -19,11 +20,13 @@ class SymbolCreateView(APIView):
         return Response({}, status=status.HTTP_200_OK)
 
 
+class WithdrawView(APIView):
+
     def post(self, request, *args, **kwargs):
         # todo: verify data
 
         # push to zellular
-        Zellular.push(CREATE_SYMBOL, request.data)
+        Zellular.push(WITHDRAW, request.data)
 
         return Response({}, status=status.HTTP_200_OK)
 
@@ -34,6 +37,7 @@ class ChainListView(APIView):
             ChainListSerializer(Chain.objects.all(), many=True).data,
             status=status.HTTP_200_OK
         )
+
 
 class SymbolListView(APIView):
     def get(self, request, *args, **kwargs):

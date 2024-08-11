@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from web3 import Web3
 
-from symbol.models import Symbol, BalanceModifier, Balance, Chain
+from symbol.models import Symbol, BalanceModifier, Balance, Chain, Withdraw
 from symbol.scanner import Scanner
 
 
@@ -42,6 +42,19 @@ class SymbolCreateSerializer(serializers.ModelSerializer):
             )
 
         return symbol
+
+class WithdrawSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Withdraw
+        fields = '__all__'
+        read_only_fields = ('user', 'signature')
+
+    def validate(self, attrs):
+        user = self.context.get('user')
+        balance = Balance.get_balance_obj(Symbol.get_usdc(), user)
+        if attrs['amount'] > balance.value:
+            raise serializers.ValidationError("Not Enough Balance")
+        return attrs
 
 
 class BalanceListSerializer(serializers.ModelSerializer):

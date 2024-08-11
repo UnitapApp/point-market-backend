@@ -9,6 +9,10 @@ class Symbol(models.Model):
     name = models.CharField(max_length=10, unique=True)
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
 
+    @staticmethod
+    def get_usdc():
+        return Symbol.objects.get(name='USDC')
+
     def __str__(self):
         return self.name
 
@@ -82,3 +86,9 @@ class BalanceModifier(models.Model):
             balance.increase(value)
         else:
             balance.decrease(value)
+
+
+class Withdraw(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    amount = models.BigIntegerField()
+    signature = models.JSONField(null=True)

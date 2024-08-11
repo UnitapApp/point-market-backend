@@ -10,6 +10,7 @@ class Config(models.Model):
             return Config.objects.create()
         return Config.objects.first()
 
+
 class ZellularTransaction(models.Model):
     PULL = 'pull'
     PUSH = 'push'

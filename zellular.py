@@ -9,26 +9,7 @@ from core.models import ZellularTransaction
 class ZellularStream:
     queue = []
 
-    # @staticmethod
-    # def push(method, data):
-    #     with open('zellular_queue', 'a') as file:
-    #         file.writelines('\n' + json.dumps({
-    #             'method': method,
-    #             'data': data
-    #         }))
-    #
-    # @staticmethod
-    # def pull():
-    #     queue = []
-    #     with open('zellular_queue') as file:
-    #         for tx in file.read().split('\n'):
-    #             if tx:
-    #                 queue.append(json.loads(tx))
-    #
-    #     with open('zellular_queue', 'w') as file:
-    #         file.write('')
-    #
-    #     return queue
+    bypass = True
 
     node_url = 'http://5.161.230.186:6001'
     app_name = 'point_market'
@@ -40,6 +21,9 @@ class ZellularStream:
             method=method,
             data=data
         )
+
+        if ZellularStream.bypass:
+            return
 
         data = {
             "app_name": 'point_market',
@@ -62,6 +46,14 @@ class ZellularStream:
 
     @staticmethod
     def pull(last_pulled_index):
+
+        if ZellularStream.bypass:
+            qs = ZellularTransaction.objects.filter(type=ZellularTransaction.PUSH, id__gt=last_pulled_index).all()
+            data = qs.values('method', 'data')
+            if not len(data):
+                return [], last_pulled_index
+            last_pulled_index = qs.last().id
+            return data, last_pulled_index
 
         response: requests.Response = requests.get(
             f"{ZellularStream.node_url}/node/{ZellularStream.app_name}/transactions/finalized/last"

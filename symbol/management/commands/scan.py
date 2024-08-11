@@ -30,17 +30,23 @@ class Scan:
 
         scanner = Scanner(web3)
 
+        errors = []
         while block_number <= latest_block:
             transactions = scanner.get_transactions(block_number, min(block_number, latest_block))
 
             for transaction in transactions:
                 for modifier in modifiers:
-                    success, params = scanner.process_transaction(transaction, modifier.contract_address, modifier.function_signature, modifier.params)
-                    if success:
-                        modifier.modify(transaction['from'], params)
+                    try:
+                        success, params = scanner.process_transaction(transaction, modifier.contract_address, modifier.function_signature, modifier.params)
+                        if success:
+                            modifier.modify(transaction['from'], params)
+                    except Exception as e:
+                        errors.append(str(e))
 
             block_number += block_chuck_size
             sleep(sleep_time)
 
         chain.last_scanned_block = latest_block
         chain.save()
+
+        return errors

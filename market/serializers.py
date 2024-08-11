@@ -69,3 +69,9 @@ class OrderSerializer(serializers.ModelSerializer):
     class Meta:
         model = Order
         fields = '__all__'
+
+    def validate(self, attrs):
+        if attrs['symbol'] == Symbol.get_usdc():
+            raise serializers.ValidationError('Invalid Symbol')
+
+        return attrs

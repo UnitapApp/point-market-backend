@@ -13,7 +13,7 @@ class Order(models.Model):
         (SELL, 'sell')
     )
 
-    user = models.OneToOneField(User, on_delete=models.PROTECT, related_name='orders')
+    user = models.ForeignKey(User, on_delete=models.PROTECT, related_name='orders')
     symbol = models.ForeignKey(Symbol, on_delete=models.CASCADE)
 
     name = models.CharField(choices=NAMES, max_length=4)

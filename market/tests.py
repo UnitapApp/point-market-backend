@@ -13,7 +13,7 @@ import json
 from symbol.models import Symbol, Balance
 
 
-def create_order(private_key, symbol: Symbol, name, amount, price):
+def create_test_order(private_key, symbol: Symbol, name, amount, price):
     client = APIClient()
 
     data = json.dumps({
@@ -62,11 +62,11 @@ class MarketTestCase(TestCase):
         client = APIClient()
 
         Balance.get_balance_obj(USDC, user1).increase(50)
-        response = create_order(pk1, UXP, Order.BUY, 10, 5)
+        response = create_test_order(pk1, UXP, Order.BUY, 10, 5)
         self.assertEqual(response.status_code, 200)
 
         Balance.get_balance_obj(UXP, user2).increase(12)
-        response = create_order(pk2, UXP, Order.SELL, 5, 4)
+        response = create_test_order(pk2, UXP, Order.SELL, 5, 4)
         self.assertEqual(response.status_code, 200)
 
         PullZellular.perform()

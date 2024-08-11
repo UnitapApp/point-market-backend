@@ -40,6 +40,6 @@ class OrderBookView(APIView):
 
 class OrderView(APIView):
     def get(self, request):
-        address = request.GET.get('address ')
+        address = request.GET.get('address')
         qs = Order.objects.filter(user__username=address)
         return Response(OrderSerializer(qs, many=True).data, status=status.HTTP_200_OK)

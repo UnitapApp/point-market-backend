@@ -27,23 +27,24 @@ from symbol.management.commands.scan import Scan
 
 @api_view(['GET'])
 def run_crons(request):
+    errors = {}
 
     try:
         RunMarket.run(0)
     except Exception as e:
-       pass
+        errors['run_market'] = str(e)
 
     try:
         PullZellular.perform()
     except Exception as e:
-       pass
+        errors['pull_zellular'] = str(e)
 
     try:
         Scan.run()
     except Exception as e:
-        pass
+        errors['scan'] = str(e)
 
-    return Response({})
+    return Response({'errors': errors})
 
 
 urlpatterns = [

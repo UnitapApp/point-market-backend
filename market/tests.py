@@ -73,9 +73,21 @@ class MarketTestCase(TestCase):
         self.assertEqual(Balance.get_balance_obj(USDC, user1).value, 0)
         self.assertEqual(Balance.get_balance_obj(UXP, user2).value, 7)
 
+
         RunMarket.run(0)
 
         self.assertEqual(Balance.get_balance_obj(USDC, user1).value, 0)
         self.assertEqual(Balance.get_balance_obj(USDC, user2).value, 25)
         self.assertEqual(Balance.get_balance_obj(UXP, user1).value, 5)
         self.assertEqual(Balance.get_balance_obj(UXP, user2).value, 7)
+
+        response = client.get('/api/market/orderbook', data={'symbol': UXP.name})
+        self.assertEqual(len(response.json()['buys']), 1)
+        self.assertEqual(len(response.json()['sells']), 0)
+
+        response = client.get('/api/market/orders', data={'address': account1.address})
+        self.assertEqual(len(response.json()), 1)
+
+        response = client.get('/api/market/orders', data={'address': account2.address})
+        self.assertEqual(len(response.json()), 1)
+

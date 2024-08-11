@@ -58,7 +58,7 @@ class OrderCreateSerializer(serializers.ModelSerializer):
 
 
 class OrderBookSerializer(serializers.ModelSerializer):
-    amount = serializers.IntegerField(source='remaining_amount')
+    amount = serializers.IntegerField(source='remain_amount')
 
     class Meta:
         model = Order

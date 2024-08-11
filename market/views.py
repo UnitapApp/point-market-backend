@@ -24,10 +24,10 @@ class OrderBookView(APIView):
     def get(self, request):
         symbol = request.GET.get('symbol')
         qs = Order.objects.annotate(
-            remain_amount=F('amount') - F('filled_amount')
+            _remain_amount=F('amount') - F('filled_amount')
         ).filter(
             symbol__name=symbol,
-            remain_amount__gt=0
+            _remain_amount__gt=0
         )
 
         data = {

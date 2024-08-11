@@ -8,6 +8,12 @@ from symbol.models import Symbol, BalanceModifier, Balance
 
 
 class OrderCreateSerializer(serializers.ModelSerializer):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        self.balance = None
+        self.required = None
+
     class Meta:
         model = Order
         fields = '__all__'
@@ -40,9 +46,15 @@ class OrderCreateSerializer(serializers.ModelSerializer):
 
         if balance.value < required:
             raise serializers.ValidationError('Not Enough Balance')
-        balance.decrease(required)
+
+        self.balance = balance
+        self.required = required
 
         return attrs
+
+    def save(self, **kwargs):
+        self.balance.decrease(self.required)
+        super().save(**kwargs)
 
 
 class OrderBookSerializer(serializers.ModelSerializer):
@@ -51,6 +63,7 @@ class OrderBookSerializer(serializers.ModelSerializer):
     class Meta:
         model = Order
         fields = ('id', 'amount', 'price')
+
 
 class OrderSerializer(serializers.ModelSerializer):
     class Meta:

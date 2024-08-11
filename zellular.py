@@ -4,7 +4,7 @@ from pprint import pprint
 import requests
 
 
-class Zellular:
+class ZellularStream:
     queue = []
 
     # @staticmethod
@@ -45,7 +45,7 @@ class Zellular:
         }
 
         response: requests.Response = requests.put(
-            f"{Zellular.node_url}/node/transactions",
+            f"{ZellularStream.node_url}/node/transactions",
             data=json.dumps(data),
             headers={"Content-Type": "application/json"}
         )
@@ -56,7 +56,7 @@ class Zellular:
     def pull(last_pulled_index):
 
         response: requests.Response = requests.get(
-            f"{Zellular.node_url}/node/{Zellular.app_name}/transactions/finalized/last"
+            f"{ZellularStream.node_url}/node/{ZellularStream.app_name}/transactions/finalized/last"
         )
         if response.status_code == 200:
             latest_index = response.json()['data']['index']
@@ -65,9 +65,9 @@ class Zellular:
 
         if latest_index > last_pulled_index:
             response: requests.Response = requests.get(
-                f"{Zellular.node_url}/node/transactions",
+                f"{ZellularStream.node_url}/node/transactions",
                 params={
-                    'app_name': Zellular.app_name,
+                    'app_name': ZellularStream.app_name,
                     'after': last_pulled_index,
                     'states': 'finalized'
                 }

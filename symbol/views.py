@@ -6,7 +6,7 @@ from point_market_backend.method_mapping import CREATE_SYMBOL, WITHDRAW
 from symbol.methods import create_symbol
 from symbol.models import Chain, Symbol, Balance
 from symbol.serializers import ChainListSerializer, SymbolListSerializer, BalanceListSerializer
-from zellular import Zellular
+from zellular import ZellularStream
 
 
 class SymbolCreateView(APIView):
@@ -15,7 +15,7 @@ class SymbolCreateView(APIView):
         create_symbol(request.data, save=False)
 
         # push to zellular
-        Zellular.push(CREATE_SYMBOL, request.data)
+        ZellularStream.push(CREATE_SYMBOL, request.data)
 
         return Response({}, status=status.HTTP_200_OK)
 
@@ -26,7 +26,7 @@ class WithdrawView(APIView):
         # todo: verify data
 
         # push to zellular
-        Zellular.push(WITHDRAW, request.data)
+        ZellularStream.push(WITHDRAW, request.data)
 
         return Response({}, status=status.HTTP_200_OK)
 

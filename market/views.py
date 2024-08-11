@@ -7,7 +7,7 @@ from market.methods import create_order
 from market.models import Order
 from market.serializers import OrderBookSerializer, OrderSerializer
 from point_market_backend.method_mapping import CREATE_ORDER
-from zellular import Zellular
+from zellular import ZellularStream
 
 
 class CreateOrderView(APIView):
@@ -15,7 +15,7 @@ class CreateOrderView(APIView):
         create_order(request.data, save=False)
 
         # push to zellular
-        Zellular.push(CREATE_ORDER, request.data)
+        ZellularStream.push(CREATE_ORDER, request.data)
 
         return Response({}, status=status.HTTP_200_OK)
 

@@ -1,7 +1,7 @@
 from django.core.management.base import BaseCommand
 
 from point_market_backend.method_mapping import METHODS
-from zellular import Zellular
+from zellular import ZellularStream
 
 
 class Command(BaseCommand):
@@ -15,7 +15,7 @@ class PullZellular:
 
     @staticmethod
     def perform():
-        txs = Zellular.pull()
+        txs = ZellularStream.pull()
         for tx in txs:
             try:
                 METHODS[tx['method']](tx['data'])

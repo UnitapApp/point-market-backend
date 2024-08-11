@@ -3,7 +3,7 @@ from web3 import Web3
 from point_market_backend.rpcs import RPCs
 from point_market_backend.utils import verify_signature
 from symbol.models import Symbol, Withdraw
-from symbol.operator import PointMarketOperator
+# from symbol.operator import PointMarketOperator
 from symbol.serializers import SymbolCreateSerializer, WithdrawSerializer
 import yaml
 

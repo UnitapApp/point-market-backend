@@ -45,6 +45,9 @@ class Balance(models.Model):
         self.value -= amount
         self.save()
 
+    def __str__(self):
+        return f"{self.user.username} : {self.symbol.name} : {self.value}"
+
 
 class BalanceModifier(models.Model):
     symbol = models.ForeignKey(Symbol, on_delete=models.CASCADE, related_name='modifiers')

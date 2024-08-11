@@ -8,18 +8,18 @@ from symbol.models import Chain, BalanceModifier
 from symbol.scanner import Scanner
 
 
-class Scan(BaseCommand):
+class Command(BaseCommand):
     help = "Scans blockchain for transactions"
 
     def handle(self, *args, **options):
-        self.run()
+        Scan.run()
 
 
+class Scan:
     @staticmethod
     def run(block_chuck_size=10, sleep_time=1):
         for chain in Chain.objects.all():
-             Scan.run_chain(chain, block_chuck_size, sleep_time)
-
+            Scan.run_chain(chain, block_chuck_size, sleep_time)
 
     @staticmethod
     def run_chain(chain: Chain, block_chuck_size, sleep_time):

@@ -2,7 +2,7 @@ from django.test import TestCase
 from eth_account import Account
 from rest_framework.test import APIClient
 
-from point_market_backend.management.commands.pull_zellular import PullZellular
+from core.management.commands.pull_zellular import PullZellular
 from point_market_backend.utils import sign, get_or_create_user
 import json
 

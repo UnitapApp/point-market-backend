@@ -6,11 +6,11 @@ from rest_framework.test import APIClient
 
 from market.management.commands.run_market import RunMarket
 from market.models import Order
-from point_market_backend.management.commands.pull_zellular import PullZellular
+from core.management.commands.pull_zellular import PullZellular
 from point_market_backend.utils import sign, get_or_create_user
 import json
 
-from symbol.models import Chain, Symbol, Balance
+from symbol.models import Symbol, Balance
 
 
 def create_order(private_key, symbol: Symbol, name, amount, price):

@@ -4,11 +4,14 @@ from point_market_backend.method_mapping import METHODS
 from zellular import Zellular
 
 
-class PullZellular(BaseCommand):
+class Command(BaseCommand):
     help = "Pulls new requests from zellular"
 
     def handle(self, *args, **options):
-        self.perform()
+        PullZellular.perform()
+
+
+class PullZellular:
 
     @staticmethod
     def perform():

@@ -14,16 +14,14 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-from io import StringIO
 
 from django.contrib import admin
-from django.core.management import call_command
 from django.urls import path, include
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
 from market.management.commands.run_market import RunMarket
-from point_market_backend.management.commands.pull_zellular import PullZellular
+from core.management.commands.pull_zellular import PullZellular
 from symbol.management.commands.scan import Scan
 
 

@@ -1,7 +1,7 @@
 from django_cron import CronJobBase, Schedule
 
 from market.management.commands.run_market import RunMarket
-from point_market_backend.management.commands.pull_zellular import PullZellular
+from core.management.commands.pull_zellular import PullZellular
 from symbol.management.commands.scan import Scan
 
 

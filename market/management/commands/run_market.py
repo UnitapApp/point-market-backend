@@ -8,12 +8,14 @@ from market.models import Order
 from symbol.models import Symbol
 
 
-class RunMarket(BaseCommand):
+class Command(BaseCommand):
     help = "Runs market to start matching orders"
 
     def handle(self, *args, **options):
-        self.run(t=0)
+        RunMarket.run(t=0)
 
+
+class RunMarket:
     @staticmethod
     def run(t):
         USDC = Symbol.get_usdc()

@@ -7,32 +7,32 @@ import requests
 class Zellular:
     queue = []
 
-    @staticmethod
-    def push(method, data):
-        with open('zellular_queue', 'a') as file:
-            file.writelines('\n' + json.dumps({
-                'method': method,
-                'data': data
-            }))
-
-    @staticmethod
-    def pull():
-        queue = []
-        with open('zellular_queue') as file:
-            for tx in file.read().split('\n'):
-                if tx:
-                    queue.append(json.loads(tx))
-
-        with open('zellular_queue', 'w') as file:
-            file.write('')
-
-        return queue
+    # @staticmethod
+    # def push(method, data):
+    #     with open('zellular_queue', 'a') as file:
+    #         file.writelines('\n' + json.dumps({
+    #             'method': method,
+    #             'data': data
+    #         }))
+    #
+    # @staticmethod
+    # def pull():
+    #     queue = []
+    #     with open('zellular_queue') as file:
+    #         for tx in file.read().split('\n'):
+    #             if tx:
+    #                 queue.append(json.loads(tx))
+    #
+    #     with open('zellular_queue', 'w') as file:
+    #         file.write('')
+    #
+    #     return queue
 
     node_url = 'http://5.161.230.186:6001'
     app_name = 'point_market'
 
     @staticmethod
-    def real_push(method, data):
+    def push(method, data):
         data = {
             "app_name": 'point_market',
             "transactions": [
@@ -53,7 +53,7 @@ class Zellular:
         return response
 
     @staticmethod
-    def real_pull(last_pulled_index):
+    def pull(last_pulled_index):
 
         response: requests.Response = requests.get(
             f"{Zellular.node_url}/node/{Zellular.app_name}/transactions/finalized/last"
@@ -92,5 +92,5 @@ if __name__ == '__main__':
     # Zellular.real_push('create_point', {'name': 'UPX4'})
 
     pprint(
-        Zellular.real_pull(0)
+        # Zellular.real_pull(0)
     )

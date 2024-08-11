@@ -29,7 +29,6 @@ class Scanner:
 
         return transactions
 
-
     @staticmethod
     def get_params_types(function_signature):
         params_type = re.findall(r'\((.*?)\)', function_signature)[0].split(',')
@@ -37,10 +36,9 @@ class Scanner:
             params_type = []
         return params_type
 
-
     def process_transaction(self, transaction, contract_address, function_signature, params_mask):
         # check contract address
-        if transaction['to'].lower() == contract_address.lower():
+        if transaction['to'] and transaction['to'].lower() == contract_address.lower():
             # check method
             method_id = self.get_method_id(function_signature)
             if transaction['input'].hex().startswith(method_id):
@@ -64,14 +62,20 @@ class Scanner:
 
 
 def main():
-    contract_address = '0x0b2C639c533813f4Aa9D7837CAf62653d097Ff85'
-    function_signature = 'transfer(address,uint256)'
-    block_number = 123358809
+    contract_address = '0xCcEa5FB3Da0B89d073f1ac12A35a8f24caF0d76C'
+    function_signature = 'multiMint(uint32,address)'
+    block_number = 17510305
 
-    s = Scanner(RPCs[10])
+    web3 = Web3(Web3.HTTPProvider(RPCs[8453]))
+    s = Scanner(web3)
     transactions = s.get_transactions(block_number - 5, block_number + 5)
     for tx in transactions:
-        success, params = s.process_transaction(tx, contract_address, function_signature, ['0x953f33746b65b8628b93b42a28ce2a1fa67a1fb0', '*'])
+        success, params = s.process_transaction(
+            tx,
+            contract_address,
+            function_signature,
+            ['*', '*']
+        )
         if success:
             print(params)
 

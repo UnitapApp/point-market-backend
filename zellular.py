@@ -3,6 +3,8 @@ import json
 from pprint import pprint
 import requests
 
+from core.models import ZellularTransaction
+
 
 class ZellularStream:
     queue = []
@@ -33,6 +35,12 @@ class ZellularStream:
 
     @staticmethod
     def push(method, data):
+        ZellularTransaction.objects.create(
+            type=ZellularTransaction.PUSH,
+            method=method,
+            data=data
+        )
+
         data = {
             "app_name": 'point_market',
             "transactions": [
@@ -76,7 +84,14 @@ class ZellularStream:
             if response.status_code == 200:
                 data = []
                 for row in response.json()['data']:
-                    data.append(json.loads(row['body']))
+                    row = json.loads(row['body'])
+                    data.append(row)
+                    ZellularTransaction.objects.create(
+                        type=ZellularTransaction.PULL,
+                        method=row['method'],
+                        data=row['data']
+                    )
+
                 return data, latest_index
             else:
                 raise Exception(response.text)

@@ -59,7 +59,8 @@ class ZellularStream:
             f"{ZellularStream.node_url}/node/{ZellularStream.app_name}/transactions/finalized/last"
         )
         if response.status_code == 200:
-            latest_index = response.json()['data']['index']
+            data = response.json()['data']
+            latest_index = data.get('index', 0)
         else:
             raise Exception(response.text)
 
@@ -76,9 +77,11 @@ class ZellularStream:
                 data = []
                 for row in response.json()['data']:
                     data.append(json.loads(row['body']))
-                return data
+                return data, latest_index
             else:
                 raise Exception(response.text)
+
+        return [], last_pulled_index
 
 
 if __name__ == '__main__':

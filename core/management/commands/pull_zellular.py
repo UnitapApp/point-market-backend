@@ -1,5 +1,6 @@
 from django.core.management.base import BaseCommand
 
+from core.models import Config
 from point_market_backend.method_mapping import METHODS
 from zellular import ZellularStream
 
@@ -15,7 +16,10 @@ class PullZellular:
 
     @staticmethod
     def perform():
-        txs = ZellularStream.pull()
+        config = Config.get_config()
+        txs, latest_index = ZellularStream.pull(config.last_pulled_index)
+        config.last_pulled_index = latest_index
+        config.save()
         for tx in txs:
             try:
                 METHODS[tx['method']](tx['data'])
